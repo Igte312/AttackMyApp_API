@@ -7,6 +7,7 @@ using Domain.InterfaceRepository;
 using Aplication.InterfaceService;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AttackMyApp
 {
@@ -89,6 +90,15 @@ namespace AttackMyApp
             app.Run();
 
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+                webBuilder.UseUrls($"http://0.0.0.0:{port}");
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }
 
