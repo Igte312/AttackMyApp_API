@@ -1,0 +1,14 @@
+﻿services:
+  - type: web
+    name: AttackMyApp
+    env: dotnet
+    plan: free
+    repo: https://github.com/Igte312/AttackMyApp_API
+    branch: master
+    buildCommand: "dotnet publish -c Release"
+    startCommand: "dotnet /app/AttackMyApp.dll"  # Comando para ejecutar tu aplicación
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: CONNECTION_STRING
+        value: "Host=dpg-crjos8tds78s73ecj3s0-a.oregon-postgres.render.com;Port=5432;Database=attack_my_app;Username=igna;Password=KbpEsJPRzlltqCJKVwW8aUawDSS3Fvf9;SSL Mode=Require;Trust Server Certificate=true;"
