@@ -1,0 +1,6 @@
+@AttackMyApp_HostAddress = http://localhost:5289
+
+GET {{AttackMyApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
