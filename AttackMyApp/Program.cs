@@ -48,11 +48,9 @@ namespace AttackMyApp
             // Register Services
             builder.Services.AddScoped<IUsersService, UserService>();
 
-
-
             //builder.Services.AddServices();
             //builder.Services.AddRepositories();
-                //builder.Services.AddJwtAuthentication(configuration);
+            //builder.Services.AddJwtAuthentication(configuration);
             builder.Services.AddHttpClient();
 
             var app = builder.Build();
