@@ -90,15 +90,6 @@ namespace AttackMyApp
             app.Run();
 
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-                webBuilder.UseUrls($"http://0.0.0.0:{port}");
-                webBuilder.UseStartup<Startup>();
-            });
     }
 }
 
