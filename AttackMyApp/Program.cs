@@ -85,8 +85,11 @@ namespace AttackMyApp
 
             app.MapControllers();
 
-            app.Run();
+            // Bind the application to the correct port, as per Render's requirement
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "5000"; // Default to 5000 if PORT is not set
+            app.Urls.Add($"http://0.0.0.0:{port}");
 
+            app.Run();
         }
     }
 }
