@@ -16,11 +16,18 @@ namespace AttackMyApp.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult CreateUser(CreateUserRequest request)
+        public IActionResult CreateUser([FromBody] CreateUserRequest request)
         {
             var response = _usersService.CreateUser(request);
 
             return Ok(new { UserId = response });
+        }
+
+        [HttpGet]
+        [Route("test")]
+        public IActionResult Test()
+        {
+            return Ok("La API está funcionando correctamente.");
         }
     }
 }
