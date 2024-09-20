@@ -27,7 +27,11 @@ namespace AttackMyApp.Controllers
         [Route("test")]
         public IActionResult Test()
         {
-            return Ok("La API está funcionando correctamente.");
+            // Obtén el valor de la variable de entorno
+            var testVariable = Environment.GetEnvironmentVariable("TEST_VARIABLE");
+
+            // Devuelve el valor de la variable de entorno en la respuesta
+            return Ok($"La API está funcionando correctamente. Valor de TEST_VARIABLE: {testVariable}");
         }
     }
 }
