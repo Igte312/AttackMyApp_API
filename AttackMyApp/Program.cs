@@ -19,7 +19,6 @@ namespace AttackMyApp
             Env.Load();
 
             var builder = WebApplication.CreateBuilder(args);
-            var configuration = builder.Configuration;
 
             builder.Services.AddCors(options =>
             {
@@ -33,36 +32,22 @@ namespace AttackMyApp
 
             // Add services to the container.
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Construir la cadena de conexión usando variables de entorno
+            var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "default_host";
+            var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "default_db";
+            var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
+            var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "default_user";
+            var dbPass = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "default_password";
 
-            // Obtener la cadena de conexión del archivo appsettings.json
-            var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection");
-
-            var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
-            var dbNAme = Environment.GetEnvironmentVariable("DB_NAME");
-            var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
-            var dbUser = Environment.GetEnvironmentVariable("DB_USER");
-            var dbPass = Environment.GetEnvironmentVariable("DB_PASSWORD");
-            // Reemplazar las variables de entorno en la cadena de conexión
-            var connectionString = connectionStringTemplate!
-                .Replace("${DB_HOST}", dbHost)
-                .Replace("${DB_NAME}", dbNAme)
-                .Replace("${DB_PORT}", dbPort)
-                .Replace("${DB_USER}", dbUser)
-                .Replace("${DB_PASSWORD}", dbPass);
+            // Crear la cadena de conexión
+            var connectionString = $"Host={dbHost};Database={dbName};Port={dbPort};Username={dbUser};Password={dbPass};";
 
             // Configurar DbContext con la cadena de conexión final
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
-
-            //builder.Services.AddSqlServiceContext(configuration);
-
-            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 
             // Register Repositories
             builder.Services.AddScoped<IUserRepository, UsersRepository>();
