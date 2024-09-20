@@ -19,7 +19,7 @@ namespace Aplication.Service
             _userRepository = userRepository;
         }
 
-        public Guid CreateUser(CreateUserRequest request)
+        public Guid  CreateUser(CreateUserRequest request)
         {
             if (request == null)
             {
