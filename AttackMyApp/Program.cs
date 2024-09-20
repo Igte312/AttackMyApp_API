@@ -19,6 +19,9 @@ namespace AttackMyApp
 
             var configuration = builder.Configuration;
 
+            //region nuevo
+            configuration.AddJsonFile("/etc/secrets/appsettings.json", optional: true, reloadOnChange: true);
+            // region nuevo fin
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("EnableCORS", corsBuilder =>
