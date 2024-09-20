@@ -41,13 +41,18 @@ namespace AttackMyApp
             // Obtener la cadena de conexión del archivo appsettings.json
             var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection");
 
+            var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+            var dbNAme = Environment.GetEnvironmentVariable("DB_NAME");
+            var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+            var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+            var dbPass = Environment.GetEnvironmentVariable("DB_PASSWORD");
             // Reemplazar las variables de entorno en la cadena de conexión
             var connectionString = connectionStringTemplate!
-                .Replace("${DB_HOST}", Environment.GetEnvironmentVariable("DB_HOST") ?? "default_host")
-                .Replace("${DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME") ?? "default_db")
-                .Replace("${DB_PORT}", Environment.GetEnvironmentVariable("DB_PORT") ?? "5432")
-                .Replace("${DB_USER}", Environment.GetEnvironmentVariable("DB_USER") ?? "default_user")
-                .Replace("${DB_PASSWORD}", Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "default_password");
+                .Replace("${DB_HOST}", dbHost)
+                .Replace("${DB_NAME}", dbNAme)
+                .Replace("${DB_PORT}", dbPort)
+                .Replace("${DB_USER}", dbUser)
+                .Replace("${DB_PASSWORD}", dbPass);
 
             // Configurar DbContext con la cadena de conexión final
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
