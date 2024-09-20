@@ -28,10 +28,10 @@ namespace AttackMyApp.Controllers
         public IActionResult Test()
         {
             // Obtén el valor de la variable de entorno
-            var testVariable = Environment.GetEnvironmentVariable("TEST_VARIABLE");
+            var testVariable = Environment.GetEnvironmentVariable("DB_HOST");
 
             // Devuelve el valor de la variable de entorno en la respuesta
-            return Ok($"La API está funcionando correctamente. Valor de TEST_VARIABLE: {testVariable}");
+            return Ok($"La API está funcionando correctamente. Valor de DB_HOST: {testVariable}");
         }
     }
 }
