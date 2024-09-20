@@ -1,4 +1,3 @@
-
 using Microsoft.Extensions.FileProviders;
 using Infrastructure.Configuration;
 using Domain.Models;
@@ -8,6 +7,7 @@ using Aplication.InterfaceService;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
+using DotNetEnv;
 
 namespace AttackMyApp
 {
@@ -15,8 +15,10 @@ namespace AttackMyApp
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            // Cargar las variables de entorno desde el archivo .env antes de crear el builder
+            Env.Load();
 
+            var builder = WebApplication.CreateBuilder(args);
             var configuration = builder.Configuration;
 
             builder.Services.AddCors(options =>
@@ -30,17 +32,32 @@ namespace AttackMyApp
             });
 
             // Add services to the container.
-            
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddSqlServiceContext(configuration);
 
+            // Obtener la cadena de conexión del archivo appsettings.json
+            var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            // Reemplazar las variables de entorno en la cadena de conexión
+            var connectionString = connectionStringTemplate
+                .Replace("${DB_HOST}", Environment.GetEnvironmentVariable("DB_HOST") ?? "default_host")
+                .Replace("${DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME") ?? "default_db")
+                .Replace("${DB_PORT}", Environment.GetEnvironmentVariable("DB_PORT") ?? "5432")
+                .Replace("${DB_USER}", Environment.GetEnvironmentVariable("DB_USER") ?? "default_user")
+                .Replace("${DB_PASSWORD}", Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "default_password");
+
+            // Configurar DbContext con la cadena de conexión final
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(connectionString));
+
+            //builder.Services.AddSqlServiceContext(configuration);
+
+            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
             // Register Repositories
             builder.Services.AddScoped<IUserRepository, UsersRepository>();
@@ -48,9 +65,6 @@ namespace AttackMyApp
             // Register Services
             builder.Services.AddScoped<IUsersService, UserService>();
 
-            //builder.Services.AddServices();
-            //builder.Services.AddRepositories();
-            //builder.Services.AddJwtAuthentication(configuration);
             builder.Services.AddHttpClient();
 
             var app = builder.Build();
@@ -61,36 +75,14 @@ namespace AttackMyApp
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            //if (app.Environment.IsDevelopment() || app.Environment.IsProduction() || app.Environment.IsEnvironment("QA"))
-            //{
-            //    app.UseSwagger();
-            //    app.UseSwaggerUI();
-            //}
 
             app.UseHttpsRedirection();
-
             app.UseCors("EnableCORS");
-
-            //app.UseStaticFiles(new StaticFileOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(
-            //        Path.Combine(Directory.GetCurrentDirectory(), "Public")),
-            //    RequestPath = "/Public"
-            //});
-
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //app.UseMiddleware<AuthorizationMiddleware>();
-
             app.MapControllers();
-
-            // Bind the application to the correct port, as per Render's requirement
-            //var port = Environment.GetEnvironmentVariable("PORT") ?? "5000"; // Default to 5000 if PORT is not set
-            //app.Urls.Add($"http://0.0.0.0:{port}");
-
             app.Run();
         }
     }
 }
-
