@@ -42,7 +42,7 @@ namespace AttackMyApp
             var connectionStringTemplate = builder.Configuration.GetConnectionString("DefaultConnection");
 
             // Reemplazar las variables de entorno en la cadena de conexión
-            var connectionString = connectionStringTemplate
+            var connectionString = connectionStringTemplate!
                 .Replace("${DB_HOST}", Environment.GetEnvironmentVariable("DB_HOST") ?? "default_host")
                 .Replace("${DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME") ?? "default_db")
                 .Replace("${DB_PORT}", Environment.GetEnvironmentVariable("DB_PORT") ?? "5432")
