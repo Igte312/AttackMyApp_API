@@ -1,10 +1,7 @@
 using Domain.Models;
-using Aplication.Service;
-using Domain.InterfaceRepository;
-using Aplication.InterfaceService;
-using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
+using Infrastructure.Configuration;
 
 namespace AttackMyApp
 {
@@ -21,7 +18,8 @@ namespace AttackMyApp
             {
                 options.AddPolicy("EnableCORS", corsBuilder =>
                 {
-                    corsBuilder.AllowAnyOrigin()
+                    corsBuilder
+                        .AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
@@ -32,25 +30,15 @@ namespace AttackMyApp
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Construir la cadena de conexión usando variables de entorno
-            var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "default_host";
-            var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "default_db";
-            var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
-            var dbUser = Environment.GetEnvironmentVariable("DB_USER") ?? "default_user";
-            var dbPass = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "default_password";
-
-            // Crear la cadena de conexión
-            var connectionString = $"Host={dbHost};Database={dbName};Port={dbPort};Username={dbUser};Password={dbPass};";
-
+            
             // Configurar DbContext con la cadena de conexión final
+            var connectionString = DatabaseConfig.GetConnectionString();
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            // Register Repositories
-            builder.Services.AddScoped<IUserRepository, UsersRepository>();
-
-            // Register Services
-            builder.Services.AddScoped<IUsersService, UserService>();
+            //Services and Repositories
+            builder.Services.AddApplicationServices();
 
             builder.Services.AddHttpClient();
 
@@ -67,8 +55,8 @@ namespace AttackMyApp
             app.UseCors("EnableCORS");
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllers();
+
             app.Run();
         }
     }
