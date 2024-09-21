@@ -1,12 +1,9 @@
-using Microsoft.Extensions.FileProviders;
-using Infrastructure.Configuration;
 using Domain.Models;
 using Aplication.Service;
 using Domain.InterfaceRepository;
 using Aplication.InterfaceService;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using DotNetEnv;
 
 namespace AttackMyApp
