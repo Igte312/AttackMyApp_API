@@ -20,7 +20,7 @@ namespace AttackMyApp.Controllers
         {
             var response = _usersService.CreateUser(request);
 
-            return Ok(new { UserId = response });
+            return StatusCode((int)response.StatusCode, response);
         }
 
         [HttpGet]

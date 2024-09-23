@@ -1,7 +1,11 @@
-﻿using Aplication.InterfaceService;
+﻿using Aplication.ErrorHandling;
+using Aplication.InterfaceService;
 using Aplication.Request.Users;
+using Aplication.Response.ApiResponse;
+using Aplication.Response.User;
 using Domain.InterfaceRepository;
 using Domain.Models;
+using System.Net;
 
 namespace Aplication.Service
 {
@@ -14,25 +18,23 @@ namespace Aplication.Service
             _userRepository = userRepository;
         }
 
-        public Guid  CreateUser(CreateUserRequest request)
+        public ApiResponse CreateUser(CreateUserRequest request)
         {
-            if (request == null)
-            {
-                throw new Exception("Request cannot be null");
-            }
-
-            if (string.IsNullOrEmpty(request.FirstName) ||
-                string.IsNullOrEmpty(request.LastName) ||
-                string.IsNullOrEmpty(request.Email))
-            {
-                throw new Exception("All fields are required.");
-            }
-
             var newUser = NewUser(request);
 
-            var user = _userRepository.CreateUser(newUser);
+            var createdUser = _userRepository.CreateUser(newUser);
 
-            return user.UserId;
+            if (createdUser != null)
+            {
+                return ErrorHelper.CreateErrorResponse(HttpStatusCode.BadRequest, ErrorMessages.BadRequest, ErrorMessages.DbConnectionFailed);
+            }
+
+            var responseData = new UserCreateResponce
+            {
+                UserId = createdUser!.UserId,
+            };
+
+            return OkHelper.CreateOkResponse(HttpStatusCode.Created, OkMessages.Created, responseData);
         }
 
         private Users NewUser(CreateUserRequest user) 
