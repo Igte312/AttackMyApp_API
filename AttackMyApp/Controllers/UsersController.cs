@@ -19,7 +19,7 @@ namespace AttackMyApp.Controllers
         public IActionResult CreateUser([FromBody] CreateUserRequest request)
         {
             var response = _usersService.CreateUser(request);
-
+             
             return StatusCode((int)response.StatusCode, response);
         }
 

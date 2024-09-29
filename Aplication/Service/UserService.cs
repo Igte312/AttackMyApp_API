@@ -34,7 +34,7 @@ namespace Aplication.Service
                 UserId = createdUser!.UserId,
             };
 
-            return OkHelper.CreateOkResponse(HttpStatusCode.Created, OkMessages.Created, responseData);
+            return ResponseHelper.CreateResponse(HttpStatusCode.Created, OkMessages.Created, responseData);
         }
 
         private Users NewUser(CreateUserRequest user) 

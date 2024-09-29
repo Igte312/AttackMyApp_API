@@ -2,9 +2,9 @@
 
 namespace Aplication.Response.ApiResponse
 {
-    public class OkHelper
+    public class ResponseHelper
     {
-        public static ApiResponse CreateOkResponse<T>(HttpStatusCode httpStatusCode, string message, T data)
+        public static ApiResponse CreateResponse<T>(HttpStatusCode httpStatusCode, string message, T data)
         {
             var okResponse = new ApiOkResponse<T>(data);
             return new ApiResponse(httpStatusCode, message, okResponse);
