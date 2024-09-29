@@ -3,6 +3,7 @@ using System;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240929203109_NewFieldTime")]
+    partial class NewFieldTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,9 +51,12 @@ namespace Domain.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("timestamp");
 
+                    b.Property<Guid>("UserTypeSiegfriedTypeId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("SiegfriedID");
 
-                    b.HasIndex("SiegfriedTypeId");
+                    b.HasIndex("UserTypeSiegfriedTypeId");
 
                     b.ToTable("SIEGFRIED");
                 });
@@ -112,7 +118,7 @@ namespace Domain.Migrations
                 {
                     b.HasOne("Domain.Models.UserType", "UserType")
                         .WithMany()
-                        .HasForeignKey("SiegfriedTypeId")
+                        .HasForeignKey("UserTypeSiegfriedTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

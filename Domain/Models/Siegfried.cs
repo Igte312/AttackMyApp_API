@@ -11,20 +11,27 @@ namespace Domain.Models
         public Guid SiegfriedID { get; set; } = Guid.NewGuid();
 
         [Required]
-        [ForeignKey("Users")]
-        public Guid UserId { get; set; }
+        public string Email { get; set; }
 
         [Required]
         public string Password { get; set; }
 
         [Required]
-        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+        [Column(TypeName = "timestamp")]
+        public DateTime CreationDate { get; set; }
 
+        [Column(TypeName = "timestamp")]
         public DateTime? UpdateDate { get; set; }
 
-        public Guid? LastUpdateId { get; set; } = Guid.NewGuid();
+        public Guid? LastUpdateId { get; set; }
 
-        public Users User { get; set; }
+        [ForeignKey(nameof(UserType))]
+        public Guid SiegfriedTypeId { get; set; }
+
+        public UserType UserType { get; set; }
+
+        public Users Users { get; set; }
+
     }
     
 }

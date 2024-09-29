@@ -19,11 +19,20 @@ namespace Domain.Models
         public string Email { get; set; }
 
         [Required]
-        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
+        [Column(TypeName = "timestamp")]
+        public DateTime CreationDate { get; set; }
 
+        [Column(TypeName = "timestamp")]
         public DateTime? UpdateDate { get; set; }
 
-        public Guid? LastUpdateId { get; set; } = Guid.NewGuid();
+        public Guid? LastUpdateId { get; set; }
+
+
+        [Required]
+        [ForeignKey("SiegfriedID")]
+        public Guid SiegfriedID { get; set; }
+
+        public Siegfried Siegfried { get; set; }
 
     }
 }

@@ -15,8 +15,8 @@ namespace Domain.Models
 
         #region tables
         public DbSet<Users> Users { get; set; }
-
         public DbSet<Siegfried> Siegfried { get; set; }
+        public DbSet<UserType> UserType { get; set; }
         #endregion tables
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) { }

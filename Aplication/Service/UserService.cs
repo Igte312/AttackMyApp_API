@@ -24,7 +24,7 @@ namespace Aplication.Service
 
             var createdUser = _userRepository.CreateUser(newUser);
 
-            if (createdUser != null)
+            if (createdUser == null)
             {
                 return ErrorHelper.CreateErrorResponse(HttpStatusCode.BadRequest, ErrorMessages.BadRequest, ErrorMessages.DbConnectionFailed);
             }
@@ -39,11 +39,21 @@ namespace Aplication.Service
 
         private Users NewUser(CreateUserRequest user) 
         {
+            var newPass = new Siegfried
+            {
+                Email = user.Email,
+                Password = user.Password,
+                SiegfriedTypeId = Guid.Parse("0f28cd27-21c9-4cf9-b8c7-8c439db12e86"),
+                CreationDate = DateTime.Now,
+            };
+
             var newUser = new Users
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
+                CreationDate = DateTime.Now,
+                Siegfried = newPass,
             };
 
             return newUser;

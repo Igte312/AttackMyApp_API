@@ -12,9 +12,11 @@ namespace Infrastructure.Configuration
         {
             // Register Repositories
             services.AddScoped<IUserRepository, UsersRepository>();
+            services.AddScoped<IUserTypeRepository, UserTypeRepository>();
 
             // Register Services
             services.AddScoped<IUsersService, UserService>();
+            services.AddScoped<IUserTypeService, UserTypeService>();
 
             return services;
         }

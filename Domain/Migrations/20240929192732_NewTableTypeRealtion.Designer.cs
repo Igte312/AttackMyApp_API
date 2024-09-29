@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Domain.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240929174823_NewTable2.3")]
-    partial class NewTable23
+    [Migration("20240929192732_NewTableTypeRealtion")]
+    partial class NewTableTypeRealtion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,10 @@ namespace Domain.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("LastUpdateId")
                         .HasColumnType("uuid");
 
@@ -41,17 +45,35 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("SiegfriedTypeId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("UserTypeSiegfriedTypeId")
                         .HasColumnType("uuid");
 
                     b.HasKey("SiegfriedID");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserTypeSiegfriedTypeId");
 
                     b.ToTable("SIEGFRIED");
+                });
+
+            modelBuilder.Entity("Domain.Models.UserType", b =>
+                {
+                    b.Property<Guid>("SiegfriedTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SiegfriedType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("SiegfriedTypeId");
+
+                    b.ToTable("SIEGFRIED_TYPE");
                 });
 
             modelBuilder.Entity("Domain.Models.Users", b =>
@@ -78,23 +100,46 @@ namespace Domain.Migrations
                     b.Property<Guid?>("LastUpdateId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("SiegfriedID")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("UserId");
+
+                    b.HasIndex("SiegfriedID")
+                        .IsUnique();
 
                     b.ToTable("SIGRID_USER");
                 });
 
             modelBuilder.Entity("Domain.Models.Siegfried", b =>
                 {
-                    b.HasOne("Domain.Models.Users", "User")
+                    b.HasOne("Domain.Models.UserType", "UserType")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserTypeSiegfriedTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("UserType");
+                });
+
+            modelBuilder.Entity("Domain.Models.Users", b =>
+                {
+                    b.HasOne("Domain.Models.Siegfried", "Siegfried")
+                        .WithOne("Users")
+                        .HasForeignKey("Domain.Models.Users", "SiegfriedID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Siegfried");
+                });
+
+            modelBuilder.Entity("Domain.Models.Siegfried", b =>
+                {
+                    b.Navigation("Users")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
