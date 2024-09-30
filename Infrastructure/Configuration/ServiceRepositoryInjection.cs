@@ -1,5 +1,7 @@
 ﻿using Aplication.InterfaceService;
 using Aplication.Service;
+using Aplication.Utilities.Interface;
+using Aplication.Utilities.Service;
 using Domain.InterfaceRepository;
 using Infrastructure.Repository;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +19,7 @@ namespace Infrastructure.Configuration
             // Register Services
             services.AddScoped<IUsersService, UserService>();
             services.AddScoped<IUserTypeService, UserTypeService>();
+            services.AddScoped<IHashUtilService, HashUtilService>();
 
             return services;
         }

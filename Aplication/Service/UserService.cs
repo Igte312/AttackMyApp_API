@@ -3,6 +3,7 @@ using Aplication.InterfaceService;
 using Aplication.Request.Users;
 using Aplication.Response.ApiResponse;
 using Aplication.Response.User;
+using Aplication.Utilities.Interface;
 using Domain.InterfaceRepository;
 using Domain.Models;
 using System.Net;
@@ -12,10 +13,11 @@ namespace Aplication.Service
     public class UserService : IUsersService
     {
         private readonly IUserRepository _userRepository;
-
-        public UserService(IUserRepository userRepository)
+        private readonly IHashUtilService _hashUtilService;
+        public UserService(IUserRepository userRepository, IHashUtilService hashUtilService)
         {
             _userRepository = userRepository;
+            _hashUtilService = hashUtilService;
         }
 
         public ApiResponse CreateUser(CreateUserRequest request)
@@ -39,10 +41,12 @@ namespace Aplication.Service
 
         private Users NewUser(CreateUserRequest user) 
         {
+            var passHashed = _hashUtilService.GetHashFirst(user.Password);
+
             var newPass = new Siegfried
             {
                 Email = user.Email,
-                Password = user.Password,
+                Password = passHashed,
                 SiegfriedTypeId = Guid.Parse("0f28cd27-21c9-4cf9-b8c7-8c439db12e86"),
                 CreationDate = DateTime.Now,
             };
