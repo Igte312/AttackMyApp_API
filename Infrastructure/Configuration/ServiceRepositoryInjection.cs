@@ -1,4 +1,4 @@
-﻿using Aplication.InterfaceService;
+﻿using Aplication.Interfaces;
 using Aplication.Service;
 using Aplication.Utilities.Interface;
 using Aplication.Utilities.Service;

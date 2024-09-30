@@ -1,5 +1,5 @@
 ﻿using Aplication.ErrorHandling;
-using Aplication.InterfaceService;
+using Aplication.Interfaces;
 using Aplication.Request.Users;
 using Aplication.Response.ApiResponse;
 using Domain.InterfaceRepository;

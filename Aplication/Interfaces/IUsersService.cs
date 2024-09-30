@@ -1,7 +1,7 @@
 ﻿using Aplication.Request.Users;
 using Aplication.Response.ApiResponse;
 
-namespace Aplication.InterfaceService
+namespace Aplication.Interfaces
 {
     public interface IUsersService
     {
